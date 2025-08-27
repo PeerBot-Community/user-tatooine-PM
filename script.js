@@ -142,6 +142,7 @@ function getListingIcon(type) {
         'Fortress': '🏰',
         'Lodge': '🏔️'
     };
+    throw new Error('Intentional error for Sentry testing');
     return icons[type] || '🏠';
 }
 
