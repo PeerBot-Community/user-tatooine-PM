@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tatooine Stays - Desert Getaways Under Twin Suns</title>
+    <meta name="description" content="Discover unique accommodations on Tatooine - from moisture farms to luxury domes. Book your desert adventure under the twin suns.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🏜️ Tatooine Stays</h1>
+                </div>
+                <nav class="nav" aria-label="Main navigation">
+                    <a href="#listings" class="nav-link">Stays</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 id="hero-heading">Welcome to Tatooine</h2>
+                    <p class="hero-subtitle">Experience the galaxy's most unique desert accommodations under twin suns</p>
+                    <button class="cta-button" onclick="document.getElementById('listings').scrollIntoView({behavior: 'smooth'})">
+                        Explore Stays
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="listings" class="listings-section" aria-labelledby="listings-heading">
+            <div class="container">
+                <h2 id="listings-heading" class="section-title">Find Your Perfect Stay</h2>
+                
+                <div class="filters" role="region" aria-label="Property filters">
+                    <div class="filter-group">
+                        <label for="type-filter" class="filter-label">Property Type</label>
+                        <select id="type-filter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="Dome">Dome</option>
+                            <option value="Loft">Loft</option>
+                            <option value="Villa">Villa</option>
+                            <option value="Farm">Farm</option>
+                            <option value="Studio">Studio</option>
+                            <option value="Tent">Tent</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Cave">Cave</option>
+                            <option value="Suite">Suite</option>
+                            <option value="Bungalow">Bungalow</option>
+                            <option value="Fortress">Fortress</option>
+                            <option value="Lodge">Lodge</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="price-range" class="filter-label">Max Price per Night</label>
+                        <input type="range" id="price-range" class="filter-range" min="40" max="400" value="400">
+                        <span id="price-display" class="price-display">₹400</span>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="rating-filter" class="filter-label">Minimum Rating</label>
+                        <select id="rating-filter" class="filter-select">
+                            <option value="">Any Rating</option>
+                            <option value="4.5">4.5+ Stars</option>
+                            <option value="4.0">4.0+ Stars</option>
+                            <option value="3.5">3.5+ Stars</option>
+                        </select>
+                    </div>
+                    
+                    <button id="clear-filters" class="clear-filters-btn">Clear Filters</button>
+                </div>
+
+                <div id="listings-grid" class="listings-grid" role="region" aria-live="polite" aria-label="Property listings">
+                </div>
+
+                <div id="no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
+                    <h3>No stays found</h3>
+                    <p>Try adjusting your filters to see more options.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Tatooine Stays</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#press">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#safety">Safety</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#cookies">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tatooine Stays. A long time ago in a galaxy far, far away...</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="listing-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+            <div id="modal-body">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
