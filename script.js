@@ -233,5 +233,34 @@ function showError(message) {
     `;
 }
 
+function openTermsModal() {
+    const modal = document.getElementById('terms-modal');
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    
+    const modalCloseBtn = modal.querySelector('.modal-close');
+    modalCloseBtn.focus();
+    
+    document.addEventListener('keydown', handleTermsModalKeyDown);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTermsModal() {
+    const modal = document.getElementById('terms-modal');
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    document.removeEventListener('keydown', handleTermsModalKeyDown);
+    document.body.style.overflow = 'auto';
+}
+
+function handleTermsModalKeyDown(event) {
+    if (event.key === 'Escape') {
+        closeTermsModal();
+    }
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.openTermsModal = openTermsModal;
+window.closeTermsModal = closeTermsModal;

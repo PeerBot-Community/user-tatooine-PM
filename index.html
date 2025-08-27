@@ -112,7 +112,7 @@
                 <div class="footer-section">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#terms" onclick="openTermsModal()">Terms of Service</a></li>
                         <li><a href="#privacy">Privacy Policy</a></li>
                         <li><a href="#cookies">Cookie Policy</a></li>
                     </ul>
@@ -129,6 +129,74 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
             <div id="modal-body">
+            </div>
+        </div>
+    </div>
+
+    <div id="terms-modal" class="modal" role="dialog" aria-labelledby="terms-modal-title" aria-hidden="true">
+        <div class="modal-overlay" onclick="closeTermsModal()"></div>
+        <div class="modal-content terms-modal-content">
+            <button class="modal-close" onclick="closeTermsModal()" aria-label="Close terms modal">×</button>
+            <div class="terms-content">
+                <h2 id="terms-modal-title">Terms and Conditions</h2>
+                <div class="terms-text">
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing and using Tatooine Stays, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+                    <h3>2. Use License</h3>
+                    <p>Permission is granted to temporarily download one copy of Tatooine Stays materials for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+                    <ul>
+                        <li>modify or copy the materials;</li>
+                        <li>use the materials for any commercial purpose or for any public display (commercial or non-commercial);</li>
+                        <li>attempt to decompile or reverse engineer any software contained on Tatooine Stays website;</li>
+                        <li>remove any copyright or other proprietary notations from the materials.</li>
+                    </ul>
+
+                    <h3>3. Booking and Reservations</h3>
+                    <p>All bookings are subject to availability and confirmation by the property owner. Tatooine Stays acts as an intermediary between guests and hosts. By making a reservation, you agree to:</p>
+                    <ul>
+                        <li>Provide accurate and complete information</li>
+                        <li>Pay all applicable fees and taxes</li>
+                        <li>Comply with house rules and local regulations</li>
+                        <li>Respect property and other guests</li>
+                    </ul>
+
+                    <h3>4. Payment Terms</h3>
+                    <p>Payment for bookings must be made in full at the time of reservation unless otherwise specified. All prices are in galactic credits and include applicable taxes. Cancellation and refund policies vary by property and are clearly stated at the time of booking.</p>
+
+                    <h3>5. User Conduct</h3>
+                    <p>Users must not engage in any activity that:</p>
+                    <ul>
+                        <li>Violates any applicable laws or regulations</li>
+                        <li>Infringes on the rights of others</li>
+                        <li>Contains harmful or malicious content</li>
+                        <li>Attempts to gain unauthorized access to systems</li>
+                        <li>Disrupts the normal operation of the service</li>
+                    </ul>
+
+                    <h3>6. Property Standards</h3>
+                    <p>All properties listed on Tatooine Stays must meet basic safety and habitability standards appropriate for desert environments. Properties must have adequate protection from sandstorms and provide access to moisture collection systems where applicable.</p>
+
+                    <h3>7. Limitation of Liability</h3>
+                    <p>Tatooine Stays shall not be liable for any damages arising from the use of this service, including but not limited to direct, indirect, incidental, punitive, and consequential damages. This includes damages related to Tusken Raider encounters, podrace-related incidents, or Force-related phenomena.</p>
+
+                    <h3>8. Privacy and Data Protection</h3>
+                    <p>Your privacy is important to us. We collect and use personal information in accordance with our Privacy Policy. By using our service, you consent to our collection and use of personal information as outlined in our privacy policy.</p>
+
+                    <h3>9. Dispute Resolution</h3>
+                    <p>Any disputes arising from these terms shall be resolved through binding arbitration in accordance with the Galactic Trade Federation's dispute resolution procedures.</p>
+
+                    <h3>10. Modifications</h3>
+                    <p>Tatooine Stays may revise these terms at any time without notice. By using this service, you are agreeing to be bound by the then current version of these terms.</p>
+
+                    <h3>11. Contact Information</h3>
+                    <p>Questions about the Terms of Service should be sent to us at legal@tatoooine-stays.galaxy or via hologram transmission to coordinates 127.3.4.5.</p>
+
+                    <div class="terms-footer">
+                        <p><strong>Last updated:</strong> A long time ago in a galaxy far, far away...</p>
+                        <p><em>May the stays be with you.</em></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
