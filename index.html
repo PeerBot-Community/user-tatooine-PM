@@ -42,6 +42,10 @@
                 
                 <div class="filters" role="region" aria-label="Property filters">
                     <div class="filter-group">
+                        <label for="search-input" class="filter-label">Search</label>
+                        <input type="text" id="search-input" class="filter-input" placeholder="Search by name, location or description">
+                    </div>
+                    <div class="filter-group">
                         <label for="type-filter" class="filter-label">Property Type</label>
                         <select id="type-filter" class="filter-select">
                             <option value="">All Types</option>
@@ -76,6 +80,15 @@
                         </select>
                     </div>
                     
+                    <div class="filter-group">
+                        <label for="sort-select" class="filter-label">Sort By</label>
+                        <select id="sort-select" class="filter-select">
+                            <option value="default">Default</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="rating-desc">Rating</option>
+                        </select>
+                    </div>
                     <button id="clear-filters" class="clear-filters-btn">Clear Filters</button>
                 </div>
 

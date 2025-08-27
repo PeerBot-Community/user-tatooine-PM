@@ -1,5 +1,6 @@
 let allListings = [];
 let filteredListings = [];
+let sortCriteria = 'default';
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
@@ -26,12 +27,27 @@ async function loadListings() {
     }
 }
 
+function sortListings(listings) {
+    switch(sortCriteria) {
+        case 'price-asc':
+            return [...listings].sort((a, b) => a.price_per_night - b.price_per_night);
+        case 'price-desc':
+            return [...listings].sort((a, b) => b.price_per_night - a.price_per_night);
+        case 'rating-desc':
+            return [...listings].sort((a, b) => b.rating - a.rating);
+        default:
+            return listings;
+    }
+}
+
 function setupFilters() {
     const typeFilter = document.getElementById('type-filter');
     const priceRange = document.getElementById('price-range');
     const priceDisplay = document.getElementById('price-display');
     const ratingFilter = document.getElementById('rating-filter');
     const clearFiltersBtn = document.getElementById('clear-filters');
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-select');
 
     typeFilter.addEventListener('change', applyFilters);
     priceRange.addEventListener('input', function() {
@@ -40,21 +56,43 @@ function setupFilters() {
     });
     ratingFilter.addEventListener('change', applyFilters);
     clearFiltersBtn.addEventListener('click', clearFilters);
+    searchInput.addEventListener('input', debounce(applyFilters, 300));
+    sortSelect.addEventListener('change', (e) => {
+        sortCriteria = e.target.value;
+        displayListings(filteredListings);
+    });
 
     priceDisplay.textContent = `₹${priceRange.value}`;
 }
+
+const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
 
 function applyFilters() {
     const typeFilter = document.getElementById('type-filter').value;
     const maxPrice = parseInt(document.getElementById('price-range').value);
     const minRating = parseFloat(document.getElementById('rating-filter').value);
+    const searchQuery = document.getElementById('search-input').value.toLowerCase();
 
     filteredListings = allListings.filter(listing => {
         const matchesType = !typeFilter || listing.type === typeFilter;
         const matchesPrice = listing.price_per_night <= maxPrice;
         const matchesRating = !minRating || listing.rating >= minRating;
+        const matchesSearch = !searchQuery || 
+            listing.title.toLowerCase().includes(searchQuery) || 
+            listing.location.toLowerCase().includes(searchQuery) || 
+            listing.description.toLowerCase().includes(searchQuery);
         
-        return matchesType && matchesPrice && matchesRating;
+        return matchesType && matchesPrice && matchesRating && matchesSearch;
     });
 
     displayListings(filteredListings);
@@ -65,6 +103,9 @@ function clearFilters() {
     document.getElementById('price-range').value = '400';
     document.getElementById('price-display').textContent = '₹400';
     document.getElementById('rating-filter').value = '';
+    document.getElementById('search-input').value = '';
+    document.getElementById('sort-select').value = 'default';
+    sortCriteria = 'default';
     
     filteredListings = [...allListings];
     displayListings(filteredListings);
@@ -73,8 +114,15 @@ function clearFilters() {
 function displayListings(listings) {
     const listingsGrid = document.getElementById('listings-grid');
     const noResults = document.getElementById('no-results');
+    listingsGrid.classList.add('loading');
     
-    if (listings.length === 0) {
+    // Sort listings
+    const sortedListings = sortListings(listings);
+    
+    setTimeout(() => {
+        listingsGrid.classList.remove('loading');
+    
+    if (sortedListings.length === 0) {
         listingsGrid.style.display = 'none';
         noResults.style.display = 'block';
         return;
@@ -83,7 +131,8 @@ function displayListings(listings) {
     listingsGrid.style.display = 'grid';
     noResults.style.display = 'none';
     
-    listingsGrid.innerHTML = listings.map(listing => createListingCard(listing)).join('');
+    listingsGrid.innerHTML = sortedListings.map(listing => createListingCard(listing)).join('');
+    }, 300);
 }
 
 function createListingCard(listing) {

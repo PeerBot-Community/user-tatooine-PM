@@ -137,7 +137,8 @@ body {
 }
 
 .filter-select,
-.filter-range {
+.filter-range,
+.filter-input {
     padding: 0.75rem;
     border: 2px solid #e5e7eb;
     border-radius: 8px;
@@ -177,6 +178,13 @@ body {
 .clear-filters-btn:focus {
     background: #e5e7eb;
     border-color: #d1d5db;
+}
+
+/* Loading State */
+.listings-grid.loading {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
 /* Listings Grid */
