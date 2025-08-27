@@ -18,6 +18,7 @@
                     <a href="#listings" class="nav-link">Stays</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#terms" class="nav-link" onclick="showTerms()">Terms</a>
                 </nav>
             </div>
         </div>
@@ -88,6 +89,98 @@
                 </div>
             </div>
         </section>
+
+        <section id="terms" class="terms-section" aria-labelledby="terms-heading" style="display: none;">
+            <div class="container">
+                <h2 id="terms-heading" class="section-title">Terms and Conditions</h2>
+                <div class="terms-content">
+                    <div class="terms-updated">
+                        <p><em>Last updated: December 2024</em></p>
+                    </div>
+                    
+                    <div class="terms-group">
+                        <h3>1. Acceptance of Terms</h3>
+                        <p>By accessing and using Tatooine Stays, you accept and agree to be bound by the terms and provision of this agreement. These terms apply to all visitors, users, and others who access or use the service.</p>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>2. Booking and Reservations</h3>
+                        <ul>
+                            <li>All bookings are subject to availability and confirmation</li>
+                            <li>Payment is required at the time of booking</li>
+                            <li>Prices are subject to change without notice</li>
+                            <li>Special requests cannot be guaranteed but will be accommodated when possible</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>3. Cancellation Policy</h3>
+                        <ul>
+                            <li><strong>Standard Rate:</strong> Free cancellation up to 24 hours before check-in</li>
+                            <li><strong>Non-refundable Rate:</strong> No cancellation permitted</li>
+                            <li><strong>Group Bookings:</strong> Different cancellation terms may apply</li>
+                            <li>Cancellations due to sandstorms or Imperial blockades are handled case-by-case</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>4. Guest Responsibilities</h3>
+                        <ul>
+                            <li>Guests must provide valid identification upon check-in</li>
+                            <li>Maximum occupancy limits must be respected</li>
+                            <li>Smoking is prohibited in all moisture farms and enclosed domes</li>
+                            <li>Pets are welcome with prior arrangement (except for dewbacks over 2 meters)</li>
+                            <li>Quiet hours are enforced between sunset and sunrise</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>5. Property Damage and Liability</h3>
+                        <p>Guests are responsible for any damage to the property during their stay. Tatooine Stays is not liable for personal injuries or loss of personal property. We recommend travel insurance for protection against unforeseen circumstances including but not limited to Tusken Raider encounters.</p>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>6. Safety and Security</h3>
+                        <ul>
+                            <li>All accommodations meet galactic safety standards</li>
+                            <li>Emergency protocols are available in each property</li>
+                            <li>Moisture vaporators are maintained regularly for optimal performance</li>
+                            <li>Security droids patrol select properties during nighttime hours</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>7. Privacy Policy</h3>
+                        <p>We collect and use personal information in accordance with our Privacy Policy. Guest information is kept confidential and is not shared with third parties, including bounty hunters or Imperial forces, except as required by galactic law.</p>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>8. Force Majeure</h3>
+                        <p>Tatooine Stays shall not be liable for any failure or delay in performance due to circumstances beyond our reasonable control, including but not limited to acts of nature, Imperial occupation, Death Star construction, podracing events, or other galactic conflicts.</p>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>9. Dispute Resolution</h3>
+                        <p>Any disputes arising from these terms shall be resolved through the Galactic Trade Federation's mediation services. The laws of the Outer Rim Territories shall govern these terms.</p>
+                    </div>
+
+                    <div class="terms-group">
+                        <h3>10. Modifications to Terms</h3>
+                        <p>Tatooine Stays reserves the right to modify these terms at any time. Users will be notified of significant changes via hologram transmission to their registered contact information.</p>
+                    </div>
+
+                    <div class="terms-contact">
+                        <h3>Contact Information</h3>
+                        <p>For questions about these Terms and Conditions, please contact us:</p>
+                        <ul>
+                            <li>HoloNet: terms@tatooineStays.rim</li>
+                            <li>Subspace Radio: Channel 94.7 FM</li>
+                            <li>Physical Address: Anchorhead Cantina, Bay 94, Tatooine</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -112,7 +205,7 @@
                 <div class="footer-section">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#terms" onclick="showTerms()">Terms of Service</a></li>
                         <li><a href="#privacy">Privacy Policy</a></li>
                         <li><a href="#cookies">Cookie Policy</a></li>
                     </ul>

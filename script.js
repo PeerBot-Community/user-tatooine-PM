@@ -233,5 +233,50 @@ function showError(message) {
     `;
 }
 
+function showTerms() {
+    // Hide other sections
+    document.getElementById('listings').style.display = 'none';
+    
+    // Show terms section
+    const termsSection = document.getElementById('terms');
+    termsSection.style.display = 'block';
+    
+    // Scroll to terms
+    termsSection.scrollIntoView({ behavior: 'smooth' });
+    
+    // Update navigation to show a back button (optional)
+    const nav = document.querySelector('.nav');
+    if (!nav.querySelector('.back-to-listings')) {
+        const backBtn = document.createElement('a');
+        backBtn.href = '#listings';
+        backBtn.className = 'nav-link back-to-listings';
+        backBtn.textContent = '← Back to Stays';
+        backBtn.onclick = function() {
+            showListings();
+            return false;
+        };
+        nav.appendChild(backBtn);
+    }
+}
+
+function showListings() {
+    // Show listings section
+    document.getElementById('listings').style.display = 'block';
+    
+    // Hide terms section
+    document.getElementById('terms').style.display = 'none';
+    
+    // Remove back button if it exists
+    const backBtn = document.querySelector('.back-to-listings');
+    if (backBtn) {
+        backBtn.remove();
+    }
+    
+    // Scroll to listings
+    document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.showTerms = showTerms;
+window.showListings = showListings;
