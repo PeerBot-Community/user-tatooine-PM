@@ -27,11 +27,14 @@ async function loadListings() {
 }
 
 function setupFilters() {
+    const locationSearch = document.getElementById('location-search');
     const typeFilter = document.getElementById('type-filter');
     const priceRange = document.getElementById('price-range');
     const priceDisplay = document.getElementById('price-display');
     const ratingFilter = document.getElementById('rating-filter');
     const clearFiltersBtn = document.getElementById('clear-filters');
+
+    locationSearch.addEventListener('input', applyFilters);
 
     typeFilter.addEventListener('change', applyFilters);
     priceRange.addEventListener('input', function() {
@@ -45,16 +48,20 @@ function setupFilters() {
 }
 
 function applyFilters() {
+    const locationSearch = document.getElementById('location-search').value.toLowerCase();
     const typeFilter = document.getElementById('type-filter').value;
     const maxPrice = parseInt(document.getElementById('price-range').value);
     const minRating = parseFloat(document.getElementById('rating-filter').value);
 
     filteredListings = allListings.filter(listing => {
+        const matchesLocation = !locationSearch || 
+            listing.location.toLowerCase().includes(locationSearch) || 
+            listing.title.toLowerCase().includes(locationSearch);
         const matchesType = !typeFilter || listing.type === typeFilter;
         const matchesPrice = listing.price_per_night <= maxPrice;
         const matchesRating = !minRating || listing.rating >= minRating;
         
-        return matchesType && matchesPrice && matchesRating;
+        return matchesLocation && matchesType && matchesPrice && matchesRating;
     });
 
     displayListings(filteredListings);

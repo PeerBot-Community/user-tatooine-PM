@@ -32,6 +32,26 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
+    gap: 2rem;
+}
+
+.search-container {
+    flex: 1;
+    max-width: 400px;
+}
+
+#location-search {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+#location-search:focus {
+    outline: none;
+    border-color: #d97706;
 }
 
 .logo h1 {
@@ -556,6 +576,10 @@ body {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
+    }
+
+    .search-container {
+        max-width: 100%;
     }
 }
 
