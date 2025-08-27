@@ -133,6 +133,40 @@
         </div>
     </div>
 
+    <!-- Chat Bot Interface -->
+    <div id="chat-container" class="chat-container">
+        <div class="chat-header">
+            <h4>🤖 Tatooine Assistant</h4>
+            <div class="chat-controls">
+                <button class="bot-toggle active" onclick="toggleBot()">Bot: ON</button>
+                <button class="chat-close" onclick="toggleChat()">×</button>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message system">
+                <div class="message-content">
+                    <span class="message-text">Bot is active and will respond to mentions (@tatooine-bot)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message... (mention @tatooine-bot to get a response)" />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        
+        <div class="test-buttons">
+            <button onclick="testWithoutMention()" class="test-btn">Test Without Mention</button>
+            <button onclick="testWithMention()" class="test-btn">Test With Mention</button>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle" class="chat-toggle-btn" onclick="toggleChat()">
+        💬 Test Bot
+    </button>
+
     <script src="script.js"></script>
 </body>
 </html>

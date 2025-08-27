@@ -12,6 +12,227 @@ body {
     background-color: #fafafa;
 }
 
+/* Chat Bot Styles */
+.chat-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #d97706;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.chat-toggle-btn:hover {
+    background: #b45309;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+}
+
+.chat-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 999;
+}
+
+.chat-container.open {
+    transform: translateX(0);
+}
+
+.chat-header {
+    background: #d97706;
+    color: white;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.chat-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.bot-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.bot-toggle.active {
+    background: rgba(46, 160, 67, 0.3);
+}
+
+.bot-toggle.inactive {
+    background: rgba(220, 38, 38, 0.3);
+}
+
+.chat-close {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #f9fafb;
+}
+
+.chat-message {
+    margin-bottom: 12px;
+}
+
+.chat-message.user .message-content {
+    background: #d97706;
+    color: white;
+    margin-left: 40px;
+}
+
+.chat-message.bot .message-content {
+    background: white;
+    color: #333;
+    margin-right: 40px;
+    border: 1px solid #e5e7eb;
+}
+
+.chat-message.system .message-content {
+    background: #f3f4f6;
+    color: #6b7280;
+    text-align: center;
+    font-style: italic;
+}
+
+.message-content {
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.message-text {
+    word-wrap: break-word;
+}
+
+.message-time {
+    font-size: 10px;
+    opacity: 0.7;
+    align-self: flex-end;
+}
+
+.chat-input-container {
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 8px;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+#chat-input:focus {
+    border-color: #d97706;
+}
+
+.chat-input-container button {
+    background: #d97706;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.chat-input-container button:hover {
+    background: #b45309;
+}
+
+.test-buttons {
+    padding: 8px 16px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 8px;
+    background: #f9fafb;
+    border-radius: 0 0 12px 12px;
+}
+
+.test-btn {
+    flex: 1;
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.test-btn:hover {
+    background: #4b5563;
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        width: calc(100vw - 40px);
+        right: 20px;
+        left: 20px;
+        bottom: 80px;
+    }
+    
+    .chat-toggle-btn {
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;

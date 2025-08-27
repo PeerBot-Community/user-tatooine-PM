@@ -235,3 +235,144 @@ function showError(message) {
 
 window.openModal = openModal;
 window.closeModal = closeModal;
+
+// Chat Bot Feature - Only responds to mentions
+class TatooineChatBot {
+    constructor(botName = '@tatooine-bot') {
+        this.botName = botName;
+        this.isActive = true;
+        this.responses = [
+            "The twin suns are shining bright today! ☀️☀️",
+            "Looking for a place to hide from the Empire? 🏜️",
+            "May the stays be with you! ⭐",
+            "Watch out for Jawas in the desert! 👺",
+            "The moisture farming is excellent this season! 💧",
+            "Cantina music playing in the background... 🎵",
+            "I sense something... a presence I haven't felt since... 🌟"
+        ];
+    }
+
+    processMessage(message) {
+        // Only respond if the bot is mentioned
+        if (!this.isActive || !message.toLowerCase().includes(this.botName.toLowerCase())) {
+            return null;
+        }
+
+        // Generate a random response
+        const randomIndex = Math.floor(Math.random() * this.responses.length);
+        return this.responses[randomIndex];
+    }
+
+    toggle() {
+        this.isActive = !this.isActive;
+        return this.isActive;
+    }
+}
+
+// Initialize chat bot
+const chatBot = new TatooineChatBot();
+
+// Chat interface functions
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    // Add user message
+    addChatMessage(message, 'user');
+    
+    // Check if bot should respond
+    const botResponse = chatBot.processMessage(message);
+    
+    if (botResponse) {
+        // Add bot response after a short delay
+        setTimeout(() => {
+            addChatMessage(botResponse, 'bot');
+        }, 500);
+    }
+    
+    input.value = '';
+}
+
+function addChatMessage(message, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    
+    const timestamp = new Date().toLocaleTimeString();
+    
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <span class="message-text">${message}</span>
+            <span class="message-time">${timestamp}</span>
+        </div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function toggleChat() {
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.classList.toggle('open');
+}
+
+function toggleBot() {
+    const isActive = chatBot.toggle();
+    const toggleBtn = document.querySelector('.bot-toggle');
+    toggleBtn.textContent = isActive ? 'Bot: ON' : 'Bot: OFF';
+    toggleBtn.className = `bot-toggle ${isActive ? 'active' : 'inactive'}`;
+    
+    addChatMessage(
+        `Bot is now ${isActive ? 'ACTIVE - will respond to mentions' : 'INACTIVE - will not respond'}`, 
+        'system'
+    );
+}
+
+// Test functions for mention behavior
+function testWithoutMention() {
+    const testMessage = "Hello, how are you today?";
+    addChatMessage(testMessage, 'user');
+    
+    const response = chatBot.processMessage(testMessage);
+    if (response) {
+        setTimeout(() => addChatMessage(response, 'bot'), 500);
+    } else {
+        setTimeout(() => addChatMessage("(No response - bot not mentioned)", 'system'), 500);
+    }
+}
+
+function testWithMention() {
+    const testMessage = "Hey @tatooine-bot, what's the weather like?";
+    addChatMessage(testMessage, 'user');
+    
+    const response = chatBot.processMessage(testMessage);
+    if (response) {
+        setTimeout(() => addChatMessage(response, 'bot'), 500);
+    } else {
+        setTimeout(() => addChatMessage("(No response - unexpected behavior)", 'system'), 500);
+    }
+}
+
+// Handle Enter key in chat input
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener for Enter key in chat input (when it's added to DOM)
+    setTimeout(() => {
+        const chatInput = document.getElementById('chat-input');
+        if (chatInput) {
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+    }, 100);
+});
+
+// Expose functions globally
+window.sendMessage = sendMessage;
+window.toggleChat = toggleChat;
+window.toggleBot = toggleBot;
+window.testWithoutMention = testWithoutMention;
+window.testWithMention = testWithMention;
