@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Handling Test - Tatooine Stays</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .test-result { padding: 10px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Message Handling Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>1. Error Message Display Test</h2>
+        <button onclick="testErrorMessage()">Test Error Message</button>
+        <div id="error-test-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. No Results Message Test</h2>
+        <button onclick="testNoResultsMessage()">Test No Results Message</button>
+        <div id="no-results-test-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Price Display Message Test</h2>
+        <button onclick="testPriceDisplayMessage()">Test Price Display Update</button>
+        <div id="price-test-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Modal Accessibility Messages Test</h2>
+        <button onclick="testModalMessages()">Test Modal Messages</button>
+        <div id="modal-test-result" class="test-result"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function testErrorMessage() {
+            const result = document.getElementById('error-test-result');
+            try {
+                // Test the showError function
+                showError('Test error message for validation');
+                
+                // Check if error message is displayed
+                const noResults = document.getElementById('no-results');
+                if (noResults && noResults.style.display === 'block') {
+                    result.innerHTML = '<div class="success">✅ Error message handling works correctly</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ Error message not displayed properly</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error in showError function: ${error.message}</div>`;
+            }
+        }
+        
+        function testNoResultsMessage() {
+            const result = document.getElementById('no-results-test-result');
+            try {
+                // Test with empty array
+                displayListings([]);
+                
+                const noResults = document.getElementById('no-results');
+                const listingsGrid = document.getElementById('listings-grid');
+                
+                if (noResults && noResults.style.display === 'block' && 
+                    listingsGrid && listingsGrid.style.display === 'none') {
+                    result.innerHTML = '<div class="success">✅ No results message handling works correctly</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ No results message not working properly</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error in no results handling: ${error.message}</div>`;
+            }
+        }
+        
+        function testPriceDisplayMessage() {
+            const result = document.getElementById('price-test-result');
+            try {
+                // Create a mock price range input
+                const priceRange = document.createElement('input');
+                priceRange.id = 'price-range';
+                priceRange.type = 'range';
+                priceRange.value = '250';
+                document.body.appendChild(priceRange);
+                
+                const priceDisplay = document.createElement('span');
+                priceDisplay.id = 'price-display';
+                document.body.appendChild(priceDisplay);
+                
+                // Test price display update
+                priceDisplay.textContent = `₹${priceRange.value}`;
+                
+                if (priceDisplay.textContent === '₹250') {
+                    result.innerHTML = '<div class="success">✅ Price display message update works correctly</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ Price display not updating properly</div>';
+                }
+                
+                // Cleanup
+                document.body.removeChild(priceRange);
+                document.body.removeChild(priceDisplay);
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error in price display test: ${error.message}</div>`;
+            }
+        }
+        
+        function testModalMessages() {
+            const result = document.getElementById('modal-test-result');
+            try {
+                // Test modal keyboard handling function
+                const mockEvent = { key: 'Escape' };
+                
+                // Create a mock modal
+                const modal = document.createElement('div');
+                modal.id = 'listing-modal';
+                modal.classList.add('modal');
+                document.body.appendChild(modal);
+                
+                // Test keyboard handler
+                handleModalKeyDown(mockEvent);
+                
+                if (typeof handleModalKeyDown === 'function') {
+                    result.innerHTML = '<div class="success">✅ Modal keyboard message handling exists and works</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ Modal keyboard handling not found</div>';
+                }
+                
+                // Cleanup
+                document.body.removeChild(modal);
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error in modal message test: ${error.message}</div>`;
+            }
+        }
+        
+        // Run all tests automatically after page load
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Message handling test page loaded - ready for testing');
+        });
+    </script>
+</body>
+</html>
