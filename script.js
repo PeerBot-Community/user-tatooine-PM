@@ -1,11 +1,15 @@
 let allListings = [];
 let filteredListings = [];
+let favorites = [];
+let showingFavoritesOnly = false;
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
+        loadFavorites();
         setupFilters();
         displayListings(allListings);
+        updateFavoritesCount();
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Failed to load listings. Please refresh the page.');
@@ -94,11 +98,20 @@ function createListingCard(listing) {
         `<span class="amenity-tag">${amenity}</span>`
     ).join('');
     
+    const isFavorited = favorites.includes(listing.id);
+    const heartIcon = isFavorited ? '❤️' : '🤍';
+    
     return `
         <div class="listing-card" onclick="openModal('${listing.id}')" role="button" tabindex="0" 
              onkeydown="if(event.key==='Enter'||event.key===' ') openModal('${listing.id}')">
             <div class="listing-image">
                 ${getListingIcon(listing.type)}
+                <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" 
+                        data-listing-id="${listing.id}"
+                        onclick="toggleFavorite('${listing.id}', event)"
+                        aria-label="${isFavorited ? 'Remove from favorites' : 'Add to favorites'}">
+                    ${heartIcon}
+                </button>
             </div>
             <div class="listing-content">
                 <div class="listing-header">
@@ -233,5 +246,80 @@ function showError(message) {
     `;
 }
 
+// Favorites functionality
+function loadFavorites() {
+    try {
+        const saved = localStorage.getItem('tatooine-favorites');
+        favorites = saved ? JSON.parse(saved) : [];
+    } catch (error) {
+        console.error('Error loading favorites:', error);
+        favorites = [];
+    }
+}
+
+function saveFavorites() {
+    try {
+        localStorage.setItem('tatooine-favorites', JSON.stringify(favorites));
+    } catch (error) {
+        console.error('Error saving favorites:', error);
+    }
+}
+
+function toggleFavorite(listingId, event) {
+    event.stopPropagation();
+    
+    const index = favorites.indexOf(listingId);
+    if (index > -1) {
+        favorites.splice(index, 1);
+    } else {
+        favorites.push(listingId);
+    }
+    
+    saveFavorites();
+    updateFavoriteButton(listingId);
+    updateFavoritesCount();
+    
+    if (showingFavoritesOnly) {
+        displayListings(getFavoriteListings());
+    }
+}
+
+function updateFavoriteButton(listingId) {
+    const btn = document.querySelector(`[data-listing-id="${listingId}"]`);
+    if (btn) {
+        const isFavorited = favorites.includes(listingId);
+        btn.innerHTML = isFavorited ? '❤️' : '🤍';
+        btn.classList.toggle('favorited', isFavorited);
+    }
+}
+
+function updateFavoritesCount() {
+    const countElement = document.getElementById('favorites-count');
+    if (countElement) {
+        countElement.textContent = favorites.length;
+    }
+}
+
+function getFavoriteListings() {
+    return allListings.filter(listing => favorites.includes(listing.id));
+}
+
+function toggleFavoritesView() {
+    showingFavoritesOnly = !showingFavoritesOnly;
+    const favoritesBtn = document.getElementById('favorites-toggle');
+    
+    if (showingFavoritesOnly) {
+        favoritesBtn.classList.add('active');
+        displayListings(getFavoriteListings());
+        document.getElementById('listings-heading').textContent = 'Your Favorite Stays';
+    } else {
+        favoritesBtn.classList.remove('active');
+        applyFilters();
+        document.getElementById('listings-heading').textContent = 'Find Your Perfect Stay';
+    }
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.toggleFavorite = toggleFavorite;
+window.toggleFavoritesView = toggleFavoritesView;
