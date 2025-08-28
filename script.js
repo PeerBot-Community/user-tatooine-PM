@@ -1,5 +1,6 @@
 let allListings = [];
 let filteredListings = [];
+let favorites = JSON.parse(localStorage.getItem('tatooine-favorites') || '[]');
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
@@ -42,6 +43,64 @@ function setupFilters() {
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     priceDisplay.textContent = `₹${priceRange.value}`;
+    
+    // Setup navigation
+    setupNavigation();
+    updateFavoritesCount();
+}
+
+function setupNavigation() {
+    const favoritesLink = document.querySelector('a[href=\"#favorites\"]');
+    const staysLink = document.querySelector('a[href=\"#listings\"]');
+    
+    favoritesLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showFavoritesSection();
+    });
+    
+    staysLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showListingsSection();
+    });
+}
+
+function showFavoritesSection() {
+    document.getElementById('listings').style.display = 'none';
+    document.getElementById('favorites').style.display = 'block';
+    displayFavorites();
+}
+
+function showListingsSection() {
+    document.getElementById('favorites').style.display = 'none';
+    document.getElementById('listings').style.display = 'block';
+}
+
+function displayFavorites() {
+    const favoritesGrid = document.getElementById('favorites-grid');
+    const noFavorites = document.getElementById('no-favorites');
+    
+    const favoriteListings = allListings.filter(listing => favorites.includes(listing.id));
+    
+    if (favoriteListings.length === 0) {
+        favoritesGrid.style.display = 'none';
+        noFavorites.style.display = 'block';
+        return;
+    }
+    
+    favoritesGrid.style.display = 'grid';
+    noFavorites.style.display = 'none';
+    
+    favoritesGrid.innerHTML = favoriteListings.map(listing => createListingCard(listing)).join('');
+}
+
+function updateFavoritesCount() {
+    const countElement = document.getElementById('favorites-count');
+    if (favorites.length > 0) {
+        countElement.textContent = `(${favorites.length})`;
+        countElement.style.display = 'inline';
+    } else {
+        countElement.style.display = 'none';
+    }
 }
 
 function applyFilters() {
@@ -94,11 +153,18 @@ function createListingCard(listing) {
         `<span class="amenity-tag">${amenity}</span>`
     ).join('');
     
+    const isFavorite = favorites.includes(listing.id);
+    
     return `
         <div class="listing-card" onclick="openModal('${listing.id}')" role="button" tabindex="0" 
              onkeydown="if(event.key==='Enter'||event.key===' ') openModal('${listing.id}')">
             <div class="listing-image">
                 ${getListingIcon(listing.type)}
+                <button class="favorite-btn ${isFavorite ? 'favorited' : ''}" 
+                        onclick="event.stopPropagation(); toggleFavorite('${listing.id}')"
+                        aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+                    ${isFavorite ? '❤️' : '🤍'}
+                </button>
             </div>
             <div class="listing-content">
                 <div class="listing-header">
@@ -157,13 +223,28 @@ function openModal(listingId) {
         `<div class="amenity-item">${amenity}</div>`
     ).join('');
     
+    const isFavorite = favorites.includes(listing.id);
+    
     modalBody.innerHTML = `
         <div class="modal-image">
             ${getListingIcon(listing.type)}
+            <button class="favorite-btn modal-favorite ${isFavorite ? 'favorited' : ''}" 
+                    onclick="toggleFavorite('${listing.id}')"
+                    aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+                ${isFavorite ? '❤️' : '🤍'}
+            </button>
         </div>
         <div class="modal-header">
             <h2 id="modal-title" class="modal-title">${listing.title}</h2>
             <div class="modal-location">${listing.location}</div>
+            <div class="modal-actions">
+                <div class="sharing-buttons">
+                    <button class="share-btn" onclick="shareToTwitter('${listing.id}')" aria-label="Share on Twitter">🐦</button>
+                    <button class="share-btn" onclick="shareToFacebook('${listing.id}')" aria-label="Share on Facebook">📘</button>
+                    <button class="share-btn" onclick="shareToWhatsApp('${listing.id}')" aria-label="Share on WhatsApp">💬</button>
+                    <button class="share-btn" onclick="copyListingLink('${listing.id}')" aria-label="Copy link">🔗</button>
+                </div>
+            </div>
         </div>
         <div class="modal-body">
             <div class="modal-details">
@@ -233,5 +314,137 @@ function showError(message) {
     `;
 }
 
+function toggleFavorite(listingId) {
+    const index = favorites.indexOf(listingId);
+    if (index === -1) {
+        favorites.push(listingId);
+    } else {
+        favorites.splice(index, 1);
+    }
+    
+    localStorage.setItem('tatooine-favorites', JSON.stringify(favorites));
+    
+    // Update favorites count
+    updateFavoritesCount();
+    
+    // Update UI
+    displayListings(filteredListings);
+    
+    // Update favorites display if currently viewing favorites
+    if (document.getElementById('favorites').style.display !== 'none') {
+        displayFavorites();
+    }
+    
+    // Update modal if open
+    const modal = document.getElementById('listing-modal');
+    if (modal.classList.contains('show')) {
+        const modalFavoriteBtn = modal.querySelector('.modal-favorite');
+        if (modalFavoriteBtn) {
+            const isFavorite = favorites.includes(listingId);
+            modalFavoriteBtn.classList.toggle('favorited', isFavorite);
+            modalFavoriteBtn.innerHTML = isFavorite ? '❤️' : '🤍';
+            modalFavoriteBtn.setAttribute('aria-label', isFavorite ? 'Remove from favorites' : 'Add to favorites');
+        }
+    }
+}
+
+function getListingUrl(listingId) {
+    return `${window.location.origin}${window.location.pathname}?listing=${listingId}`;
+}
+
+function shareToTwitter(listingId) {
+    const listing = allListings.find(l => l.id === listingId);
+    if (!listing) return;
+    
+    const url = getListingUrl(listingId);
+    const text = `Check out this amazing ${listing.type.toLowerCase()} on Tatooine: ${listing.title} - Only ₹${listing.price_per_night}/night!`;
+    
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank', 'width=550,height=420');
+}
+
+function shareToFacebook(listingId) {
+    const url = getListingUrl(listingId);
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank', 'width=580,height=296');
+}
+
+function shareToWhatsApp(listingId) {
+    const listing = allListings.find(l => l.id === listingId);
+    if (!listing) return;
+    
+    const url = getListingUrl(listingId);
+    const text = `Check out this amazing ${listing.type.toLowerCase()} on Tatooine: ${listing.title} - Only ₹${listing.price_per_night}/night! ${url}`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+async function copyListingLink(listingId) {
+    const url = getListingUrl(listingId);
+    
+    try {
+        await navigator.clipboard.writeText(url);
+        
+        // Show feedback
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅';
+        btn.style.backgroundColor = '#4CAF50';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.backgroundColor = '';
+        }, 2000);
+    } catch (err) {
+        // Fallback for browsers that don't support clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Show feedback
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅';
+        btn.style.backgroundColor = '#4CAF50';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.backgroundColor = '';
+        }, 2000);
+    }
+}
+
+// Handle URL parameters to show specific listing
+function handleUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const listingId = params.get('listing');
+    
+    if (listingId && allListings.some(l => l.id === listingId)) {
+        setTimeout(() => openModal(listingId), 100);
+    }
+}
+
+// Update the DOMContentLoaded listener to include URL params
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        await loadListings();
+        setupFilters();
+        displayListings(allListings);
+        handleUrlParams();
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        showError('Failed to load listings. Please refresh the page.');
+    }
+});
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.toggleFavorite = toggleFavorite;
+window.shareToTwitter = shareToTwitter;
+window.shareToFacebook = shareToFacebook;
+window.shareToWhatsApp = shareToWhatsApp;
+window.copyListingLink = copyListingLink;
