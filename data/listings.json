@@ -12,7 +12,12 @@
     "thumbnail": "images/desert-dome_sm.jpg",
     "location": "Mos Eisley District",
     "amenities": ["Moisture Vaporator", "Sand-Free Zone", "Speeder Parking", "Jawa-Proof Locks"],
-    "description": "Experience Tatooine's famous twin sunsets from this climate-controlled dome. Perfect for moisture farmers and galactic travelers."
+    "description": "Experience Tatooine's famous twin sunsets from this climate-controlled dome. Perfect for moisture farmers and galactic travelers.",
+    "max_guests": 4,
+    "instant_book": true,
+    "min_nights": 2,
+    "check_in_time": "15:00",
+    "check_out_time": "11:00"
   },
   {
     "id": "tatooine-2",

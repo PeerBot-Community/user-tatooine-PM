@@ -5,6 +5,332 @@
     box-sizing: border-box;
 }
 
+/* Booking Modal Styles */
+.booking-modal-content {
+    max-width: 800px;
+    width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.booking-modal-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.booking-modal-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.date-selection, .guest-selection, .contact-info, .booking-summary {
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.date-selection h3, .guest-selection h3, .contact-info h3, .booking-summary h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #111827;
+}
+
+.date-inputs, .guest-inputs, .contact-inputs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-input-group, .guest-input-group, .input-group {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.date-input-group label, .guest-input-group label, .input-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.date-input-group input, .guest-input-group select, .input-group input, .input-group textarea {
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.date-input-group input:focus, .guest-input-group select:focus, .input-group input:focus, .input-group textarea:focus {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.calendar-container {
+    margin-top: 1rem;
+}
+
+#availability-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.calendar-header {
+    display: contents;
+}
+
+.calendar-day-header {
+    padding: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.calendar-day:hover {
+    background-color: #f3f4f6;
+}
+
+.calendar-day.available {
+    background-color: #fff;
+    color: #111827;
+}
+
+.calendar-day.unavailable {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.calendar-day.selected {
+    background-color: #d97706;
+    color: white;
+}
+
+.calendar-day.in-range {
+    background-color: #fed7aa;
+    color: #9a3412;
+}
+
+.summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-row {
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-top: 1px solid #d1d5db;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #d97706;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #b45309;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+@media (max-width: 640px) {
+    .booking-modal-content {
+        width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .date-inputs, .guest-inputs, .contact-inputs {
+        flex-direction: column;
+    }
+    
+    .date-input-group, .guest-input-group, .input-group {
+        min-width: auto;
+    }
+    
+    .booking-actions {
+        flex-direction: column;
+    }
+    
+    #availability-calendar {
+        font-size: 0.75rem;
+    }
+}
+
+/* Booking Property Card */
+.booking-property-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.booking-property-icon {
+    font-size: 2rem;
+}
+
+.booking-property-details h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: #111827;
+}
+
+.booking-property-details p {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+/* Modal Booking Section */
+.modal-booking-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.book-now-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Booking Confirmation */
+.booking-confirmation {
+    text-align: center;
+    padding: 2rem;
+}
+
+.confirmation-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.booking-confirmation h2 {
+    color: #16a34a;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.confirmation-details {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.confirmation-details h4 {
+    margin-bottom: 1rem;
+    color: #111827;
+    font-size: 1.2rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row strong {
+    color: #374151;
+}
+
+.confirmation-note {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    color: #1e40af;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
