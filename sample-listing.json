@@ -1,0 +1,22 @@
+{
+  "id": "tatooine-villa-001",
+  "title": "Desert Sunset Villa",
+  "type": "House",
+  "price_per_night": 189,
+  "rating": 4.9,
+  "reviews": 47,
+  "beds": 3,
+  "baths": 2,
+  "image": "images/desert-villa.jpg",
+  "thumbnail": "images/desert-villa_sm.jpg",
+  "location": "Anchorhead District",
+  "amenities": [
+    "Wi-Fi",
+    "Kitchen",
+    "Air Conditioning",
+    "Desert View",
+    "Parking",
+    "Pet Friendly"
+  ],
+  "description": "Experience the magic of Tatooine's twin sunsets from this beautifully appointed desert villa. Located in the peaceful Anchorhead District, this spacious home offers modern amenities while maintaining the authentic charm of traditional Tatooine architecture. Perfect for families or groups seeking an immersive desert experience with stunning panoramic views of the dune seas."
+}
