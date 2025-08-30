@@ -233,5 +233,58 @@ function showError(message) {
     `;
 }
 
+// Simple calculator function
+function calculate(a, b, operation = 'add') {
+    switch (operation) {
+        case 'add':
+            return a + b;
+        case 'subtract':
+            return a - b;
+        case 'multiply':
+            return a * b;
+        case 'divide':
+            return b !== 0 ? a / b : 'Error: Division by zero';
+        default:
+            return 'Error: Unknown operation';
+    }
+}
+
+// Test function
+function runCalculatorTests() {
+    console.log('Running Calculator Tests...');
+    
+    // Test 1: Basic addition
+    const test1 = calculate(2, 3);
+    console.log(`Test 1 - 2 + 3 = ${test1} (Expected: 5) - ${test1 === 5 ? 'PASS' : 'FAIL'}`);
+    
+    // Test 2: Subtraction
+    const test2 = calculate(10, 4, 'subtract');
+    console.log(`Test 2 - 10 - 4 = ${test2} (Expected: 6) - ${test2 === 6 ? 'PASS' : 'FAIL'}`);
+    
+    // Test 3: Multiplication
+    const test3 = calculate(7, 8, 'multiply');
+    console.log(`Test 3 - 7 * 8 = ${test3} (Expected: 56) - ${test3 === 56 ? 'PASS' : 'FAIL'}`);
+    
+    // Test 4: Division
+    const test4 = calculate(20, 4, 'divide');
+    console.log(`Test 4 - 20 / 4 = ${test4} (Expected: 5) - ${test4 === 5 ? 'PASS' : 'FAIL'}`);
+    
+    // Test 5: Calculate 500+500
+    const test5 = calculate(500, 500);
+    console.log(`Test 5 - 500 + 500 = ${test5} (Expected: 1000) - ${test5 === 1000 ? 'PASS' : 'FAIL'}`);
+    
+    console.log('Calculator Tests Complete!');
+    return test5; // Return the result of 500+500
+}
+
+// Run tests when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        runCalculatorTests();
+    }, 1000);
+});
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.calculate = calculate;
+window.runCalculatorTests = runCalculatorTests;
