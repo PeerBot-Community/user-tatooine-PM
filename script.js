@@ -233,5 +233,24 @@ function showError(message) {
     `;
 }
 
+// Test 4: Calculate 400 + 400
+function calculateTest4() {
+    const result = 400 + 400;
+    console.log(`Test 4: Calculate 400+400 = ${result}`);
+    return result;
+}
+
+// Run Test 4 when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const testResult = calculateTest4();
+        if (testResult === 800) {
+            console.log('✅ Test 4 PASSED: 400+400 correctly equals 800');
+        } else {
+            console.error('❌ Test 4 FAILED: Expected 800, got', testResult);
+        }
+    }, 200);
+});
+
 window.openModal = openModal;
 window.closeModal = closeModal;
