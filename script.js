@@ -234,21 +234,37 @@ function showError(message) {
 }
 
 // Test function to calculate 100 + 100
-function calculateTest() {
+function calculateTest1() {
     const result = 100 + 100;
     console.log(`Test 1: Calculate 100+100 = ${result}`);
     return result;
 }
 
-// Run the test when the page loads
+// Test function to calculate 200 + 200
+function calculateTest2() {
+    const result = 200 + 200;
+    console.log(`Test 2: Calculate 200+200 = ${result}`);
+    return result;
+}
+
+// Run the tests when the page loads
 document.addEventListener('DOMContentLoaded', function() {
     // Run after a short delay to ensure DOM is fully loaded
     setTimeout(() => {
-        const testResult = calculateTest();
-        if (testResult === 200) {
+        // Run Test 1
+        const testResult1 = calculateTest1();
+        if (testResult1 === 200) {
             console.log('✅ Test 1 PASSED: 100+100 correctly equals 200');
         } else {
-            console.error('❌ Test 1 FAILED: Expected 200, got', testResult);
+            console.error('❌ Test 1 FAILED: Expected 200, got', testResult1);
+        }
+        
+        // Run Test 2
+        const testResult2 = calculateTest2();
+        if (testResult2 === 400) {
+            console.log('✅ Test 2 PASSED: 200+200 correctly equals 400');
+        } else {
+            console.error('❌ Test 2 FAILED: Expected 400, got', testResult2);
         }
     }, 100);
 });
