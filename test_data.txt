@@ -1,0 +1,8 @@
+This is test data for the enhanced file processor.
+It includes multiple lines with various content.
+
+Some lines are empty, others contain special characters: @#$%^&*()
+Numbers: 123 456 789
+Unicode: café, naïve, résumé
+
+The processor should handle all of this gracefully!
