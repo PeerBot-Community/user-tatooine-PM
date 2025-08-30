@@ -233,5 +233,37 @@ function showError(message) {
     `;
 }
 
+function isPrime(n) {
+    if (n < 2) return false;
+    if (n === 2) return true;
+    if (n % 2 === 0) return false;
+    
+    for (let i = 3; i <= Math.sqrt(n); i += 2) {
+        if (n % i === 0) return false;
+    }
+    return true;
+}
+
+function getPrimesUpTo(limit) {
+    const primes = [];
+    for (let i = 2; i <= limit; i++) {
+        if (isPrime(i)) {
+            primes.push(i);
+        }
+    }
+    return primes;
+}
+
+function getNextPrime(n) {
+    let candidate = n + 1;
+    while (!isPrime(candidate)) {
+        candidate++;
+    }
+    return candidate;
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.isPrime = isPrime;
+window.getPrimesUpTo = getPrimesUpTo;
+window.getNextPrime = getNextPrime;
