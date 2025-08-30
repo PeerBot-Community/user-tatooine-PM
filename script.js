@@ -4,6 +4,7 @@ let filteredListings = [];
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
+        populateFilterDropdowns();
         setupFilters();
         displayListings(allListings);
     } catch (error) {
@@ -26,10 +27,42 @@ async function loadListings() {
     }
 }
 
+function populateFilterDropdowns() {
+    populateLocationFilter();
+    populateAmenitiesFilter();
+}
+
+function populateLocationFilter() {
+    const locationFilter = document.getElementById('location-filter');
+    const locations = [...new Set(allListings.map(listing => listing.location))].sort();
+    
+    locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location;
+        option.textContent = location;
+        locationFilter.appendChild(option);
+    });
+}
+
+function populateAmenitiesFilter() {
+    const amenitiesFilter = document.getElementById('amenities-filter');
+    const allAmenities = allListings.flatMap(listing => listing.amenities);
+    const uniqueAmenities = [...new Set(allAmenities)].sort();
+    
+    uniqueAmenities.forEach(amenity => {
+        const option = document.createElement('option');
+        option.value = amenity;
+        option.textContent = amenity;
+        amenitiesFilter.appendChild(option);
+    });
+}
+
 function setupFilters() {
     const typeFilter = document.getElementById('type-filter');
     const priceRange = document.getElementById('price-range');
     const priceDisplay = document.getElementById('price-display');
+    const locationFilter = document.getElementById('location-filter');
+    const amenitiesFilter = document.getElementById('amenities-filter');
     const ratingFilter = document.getElementById('rating-filter');
     const clearFiltersBtn = document.getElementById('clear-filters');
 
@@ -38,6 +71,8 @@ function setupFilters() {
         priceDisplay.textContent = `₹${priceRange.value}`;
         applyFilters();
     });
+    locationFilter.addEventListener('change', applyFilters);
+    amenitiesFilter.addEventListener('change', applyFilters);
     ratingFilter.addEventListener('change', applyFilters);
     clearFiltersBtn.addEventListener('click', clearFilters);
 
@@ -47,14 +82,18 @@ function setupFilters() {
 function applyFilters() {
     const typeFilter = document.getElementById('type-filter').value;
     const maxPrice = parseInt(document.getElementById('price-range').value);
+    const locationFilter = document.getElementById('location-filter').value;
+    const amenitiesFilter = document.getElementById('amenities-filter').value;
     const minRating = parseFloat(document.getElementById('rating-filter').value);
 
     filteredListings = allListings.filter(listing => {
         const matchesType = !typeFilter || listing.type === typeFilter;
         const matchesPrice = listing.price_per_night <= maxPrice;
+        const matchesLocation = !locationFilter || listing.location === locationFilter;
+        const matchesAmenities = !amenitiesFilter || listing.amenities.includes(amenitiesFilter);
         const matchesRating = !minRating || listing.rating >= minRating;
         
-        return matchesType && matchesPrice && matchesRating;
+        return matchesType && matchesPrice && matchesLocation && matchesAmenities && matchesRating;
     });
 
     displayListings(filteredListings);
@@ -64,6 +103,8 @@ function clearFilters() {
     document.getElementById('type-filter').value = '';
     document.getElementById('price-range').value = '400';
     document.getElementById('price-display').textContent = '₹400';
+    document.getElementById('location-filter').value = '';
+    document.getElementById('amenities-filter').value = '';
     document.getElementById('rating-filter').value = '';
     
     filteredListings = [...allListings];
