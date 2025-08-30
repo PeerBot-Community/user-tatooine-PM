@@ -233,5 +233,25 @@ function showError(message) {
     `;
 }
 
+// Test function to calculate 100 + 100
+function calculateTest() {
+    const result = 100 + 100;
+    console.log(`Test 1: Calculate 100+100 = ${result}`);
+    return result;
+}
+
+// Run the test when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Run after a short delay to ensure DOM is fully loaded
+    setTimeout(() => {
+        const testResult = calculateTest();
+        if (testResult === 200) {
+            console.log('✅ Test 1 PASSED: 100+100 correctly equals 200');
+        } else {
+            console.error('❌ Test 1 FAILED: Expected 200, got', testResult);
+        }
+    }, 100);
+});
+
 window.openModal = openModal;
 window.closeModal = closeModal;
