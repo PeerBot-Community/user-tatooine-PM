@@ -40,6 +40,25 @@
             <div class="container">
                 <h2 id="listings-heading" class="section-title">Find Your Perfect Stay</h2>
                 
+                <div class="ai-recommendations" role="region" aria-label="AI-powered recommendations">
+                    <h3 class="recommendations-title">🤖 Smart Recommendations</h3>
+                    <div class="recommendation-buttons">
+                        <button id="surprise-me-btn" class="recommendation-btn">
+                            🎲 Surprise Me!
+                        </button>
+                        <button id="trending-btn" class="recommendation-btn">
+                            🔥 Trending Now
+                        </button>
+                        <button id="similar-btn" class="recommendation-btn" style="display: none;">
+                            ✨ Similar Properties
+                        </button>
+                        <button id="reset-recommendations" class="recommendation-btn secondary">
+                            🏠 Show All
+                        </button>
+                    </div>
+                    <div id="recommendation-status" class="recommendation-status"></div>
+                </div>
+
                 <div class="filters" role="region" aria-label="Property filters">
                     <div class="filter-group">
                         <label for="type-filter" class="filter-label">Property Type</label>

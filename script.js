@@ -1,11 +1,20 @@
 let allListings = [];
 let filteredListings = [];
+let currentRecommendation = null;
+let viewedListings = new Set();
+let userPreferences = {
+    preferredTypes: new Map(),
+    priceRange: { min: 0, max: 400 },
+    ratingPreference: 0
+};
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
         setupFilters();
+        setupRecommendations();
         displayListings(allListings);
+        initializeUserTracking();
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Failed to load listings. Please refresh the page.');
@@ -149,6 +158,8 @@ function openModal(listingId) {
     const listing = allListings.find(l => l.id === listingId);
     if (!listing) return;
     
+    trackListingView(listing);
+    
     const modal = document.getElementById('listing-modal');
     const modalBody = document.getElementById('modal-body');
     
@@ -231,6 +242,123 @@ function showError(message) {
         <h3>Oops! Something went wrong</h3>
         <p>${message}</p>
     `;
+}
+
+function setupRecommendations() {
+    const surpriseBtn = document.getElementById('surprise-me-btn');
+    const trendingBtn = document.getElementById('trending-btn');
+    const similarBtn = document.getElementById('similar-btn');
+    const resetBtn = document.getElementById('reset-recommendations');
+
+    surpriseBtn.addEventListener('click', showSurpriseRecommendations);
+    trendingBtn.addEventListener('click', showTrendingRecommendations);
+    similarBtn.addEventListener('click', showSimilarRecommendations);
+    resetBtn.addEventListener('click', resetRecommendations);
+}
+
+function initializeUserTracking() {
+    const typeFilter = document.getElementById('type-filter');
+    const priceRange = document.getElementById('price-range');
+    const ratingFilter = document.getElementById('rating-filter');
+
+    typeFilter.addEventListener('change', () => {
+        if (typeFilter.value) {
+            const count = userPreferences.preferredTypes.get(typeFilter.value) || 0;
+            userPreferences.preferredTypes.set(typeFilter.value, count + 1);
+        }
+    });
+
+    priceRange.addEventListener('change', () => {
+        userPreferences.priceRange.max = parseInt(priceRange.value);
+    });
+
+    ratingFilter.addEventListener('change', () => {
+        if (ratingFilter.value) {
+            userPreferences.ratingPreference = Math.max(
+                userPreferences.ratingPreference, 
+                parseFloat(ratingFilter.value)
+            );
+        }
+    });
+}
+
+function trackListingView(listing) {
+    viewedListings.add(listing.id);
+    
+    const count = userPreferences.preferredTypes.get(listing.type) || 0;
+    userPreferences.preferredTypes.set(listing.type, count + 1);
+    
+    document.getElementById('similar-btn').style.display = 'inline-block';
+}
+
+function showSurpriseRecommendations() {
+    const shuffled = [...allListings].sort(() => Math.random() - 0.5);
+    const surprise = shuffled.slice(0, 3);
+    
+    currentRecommendation = 'surprise';
+    updateRecommendationStatus('🎲 Surprise selection! Here are 3 random amazing stays');
+    displayListings(surprise);
+}
+
+function showTrendingRecommendations() {
+    const trending = allListings
+        .sort((a, b) => (b.rating * b.reviews) - (a.rating * a.reviews))
+        .slice(0, 6);
+    
+    currentRecommendation = 'trending';
+    updateRecommendationStatus('🔥 Most popular stays based on ratings and reviews');
+    displayListings(trending);
+}
+
+function showSimilarRecommendations() {
+    if (viewedListings.size === 0) {
+        updateRecommendationStatus('👀 View some properties first to get similar recommendations');
+        return;
+    }
+
+    const viewedTypes = new Set();
+    const viewedPriceRanges = [];
+    
+    viewedListings.forEach(id => {
+        const listing = allListings.find(l => l.id === id);
+        if (listing) {
+            viewedTypes.add(listing.type);
+            viewedPriceRanges.push(listing.price_per_night);
+        }
+    });
+
+    const avgPrice = viewedPriceRanges.reduce((a, b) => a + b, 0) / viewedPriceRanges.length;
+    const priceThreshold = 50;
+
+    const similar = allListings
+        .filter(listing => !viewedListings.has(listing.id))
+        .filter(listing => 
+            viewedTypes.has(listing.type) || 
+            Math.abs(listing.price_per_night - avgPrice) <= priceThreshold
+        )
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 4);
+
+    if (similar.length === 0) {
+        updateRecommendationStatus('✨ No similar properties found. Try browsing more listings!');
+        return;
+    }
+
+    currentRecommendation = 'similar';
+    updateRecommendationStatus(`✨ Similar to properties you've viewed`);
+    displayListings(similar);
+}
+
+function resetRecommendations() {
+    currentRecommendation = null;
+    updateRecommendationStatus('');
+    clearFilters();
+}
+
+function updateRecommendationStatus(message) {
+    const status = document.getElementById('recommendation-status');
+    status.textContent = message;
+    status.className = message ? 'recommendation-status active' : 'recommendation-status';
 }
 
 window.openModal = openModal;
