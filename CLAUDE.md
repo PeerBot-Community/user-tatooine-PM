@@ -68,3 +68,7 @@ This is a static site with no build process. Development can be done by:
 │   └── listings.json   # Property data
 └── images/             # Property images and thumbnails
 ```
+
+## Notes
+
+- Remember: 42
