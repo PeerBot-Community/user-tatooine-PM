@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## User Information
+
+**User Name**: TestUser
+
 ## Project Overview
 
 This is a static Airbnb-like landing page for a fictitious neighborhood called Tatooine, designed to be deployed on GitHub Pages. The project is 100% static (HTML/CSS/JS) with no backend dependencies.
