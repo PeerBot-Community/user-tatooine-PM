@@ -233,5 +233,100 @@ function showError(message) {
     `;
 }
 
+// Calculator functionality
+function calculate(a, b, operation = 'add') {
+    switch (operation) {
+        case 'add':
+            return a + b;
+        case 'subtract':
+            return a - b;
+        case 'multiply':
+            return a * b;
+        case 'divide':
+            return b !== 0 ? a / b : 'Error: Division by zero';
+        default:
+            return 'Error: Invalid operation';
+    }
+}
+
+// Test functions
+function runTests() {
+    const tests = [
+        { name: 'Test 1', a: 2, b: 3, expected: 5, operation: 'add' },
+        { name: 'Test 2', a: 10, b: 4, expected: 6, operation: 'subtract' },
+        { name: 'Test 3', a: 7, b: 8, expected: 56, operation: 'multiply' },
+        { name: 'Test 4', a: 15, b: 3, expected: 5, operation: 'divide' },
+        { name: 'Test 5', a: 500, b: 500, expected: 1000, operation: 'add' },
+        { name: 'Test 6', a: 600, b: 600, expected: 1200, operation: 'add' }
+    ];
+    
+    const results = [];
+    tests.forEach(test => {
+        const result = calculate(test.a, test.b, test.operation);
+        const passed = result === test.expected;
+        results.push({
+            ...test,
+            result: result,
+            passed: passed
+        });
+    });
+    
+    return results;
+}
+
+function displayTestResults() {
+    const results = runTests();
+    const testResults = document.getElementById('test-results');
+    if (!testResults) return;
+    
+    testResults.innerHTML = `
+        <h3>Calculator Test Results</h3>
+        ${results.map(test => `
+            <div class="test-result ${test.passed ? 'passed' : 'failed'}">
+                <strong>${test.name}</strong>: ${test.a} ${getOperationSymbol(test.operation)} ${test.b} = ${test.result} 
+                ${test.passed ? '✅ PASS' : `❌ FAIL (expected ${test.expected})`}
+            </div>
+        `).join('')}
+        <div class="test-summary">
+            Tests passed: ${results.filter(t => t.passed).length}/${results.length}
+        </div>
+    `;
+}
+
+function getOperationSymbol(operation) {
+    const symbols = {
+        'add': '+',
+        'subtract': '-',
+        'multiply': '×',
+        'divide': '÷'
+    };
+    return symbols[operation] || '?';
+}
+
+function performCalculation() {
+    const num1 = parseFloat(document.getElementById('num1').value);
+    const num2 = parseFloat(document.getElementById('num2').value);
+    const operation = document.getElementById('operation').value;
+    const resultDiv = document.getElementById('calc-result');
+    
+    if (isNaN(num1) || isNaN(num2)) {
+        resultDiv.innerHTML = '<div class="error">Please enter valid numbers</div>';
+        return;
+    }
+    
+    const result = calculate(num1, num2, operation);
+    const symbol = getOperationSymbol(operation);
+    
+    resultDiv.innerHTML = `
+        <div class="calculation-result">
+            ${num1} ${symbol} ${num2} = <strong>${result}</strong>
+        </div>
+    `;
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.calculate = calculate;
+window.runTests = runTests;
+window.displayTestResults = displayTestResults;
+window.performCalculation = performCalculation;

@@ -16,6 +16,7 @@
                 </div>
                 <nav class="nav" aria-label="Main navigation">
                     <a href="#listings" class="nav-link">Stays</a>
+                    <a href="#calculator" class="nav-link">Calculator</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
                 </nav>
@@ -85,6 +86,32 @@
                 <div id="no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
                     <h3>No stays found</h3>
                     <p>Try adjusting your filters to see more options.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator-section" aria-labelledby="calculator-heading">
+            <div class="container">
+                <h2 id="calculator-heading" class="section-title">Calculator & Tests</h2>
+                
+                <div class="calculator">
+                    <div class="calculator-input">
+                        <input type="number" id="num1" placeholder="First number" aria-label="First number">
+                        <select id="operation" aria-label="Operation">
+                            <option value="add">+</option>
+                            <option value="subtract">-</option>
+                            <option value="multiply">×</option>
+                            <option value="divide">÷</option>
+                        </select>
+                        <input type="number" id="num2" placeholder="Second number" aria-label="Second number">
+                        <button onclick="performCalculation()" class="calc-button">Calculate</button>
+                    </div>
+                    <div id="calc-result" class="calc-result" aria-live="polite"></div>
+                </div>
+
+                <div class="test-section">
+                    <button onclick="displayTestResults()" class="test-button">Run All Tests</button>
+                    <div id="test-results" class="test-results" aria-live="polite"></div>
                 </div>
             </div>
         </section>
