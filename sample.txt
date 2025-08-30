@@ -1,0 +1,7 @@
+This is a sample text file for testing.
+It contains multiple lines of text.
+Some lines are longer than others.
+
+Empty lines are included too.
+The file processor will analyze this content and provide statistics.
+Python makes file handling straightforward and powerful.
