@@ -1,10 +1,12 @@
 let allListings = [];
 let filteredListings = [];
+let currentDisplayLimit = 15;
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
         setupFilters();
+        setupShowMore();
         displayListings(allListings);
     } catch (error) {
         console.error('Error initializing app:', error);
@@ -44,6 +46,14 @@ function setupFilters() {
     priceDisplay.textContent = `₹${priceRange.value}`;
 }
 
+function setupShowMore() {
+    const showMoreBtn = document.getElementById('show-more-btn');
+    showMoreBtn.addEventListener('click', function() {
+        currentDisplayLimit += 15;
+        displayListings(filteredListings, currentDisplayLimit);
+    });
+}
+
 function applyFilters() {
     const typeFilter = document.getElementById('type-filter').value;
     const maxPrice = parseInt(document.getElementById('price-range').value);
@@ -57,7 +67,8 @@ function applyFilters() {
         return matchesType && matchesPrice && matchesRating;
     });
 
-    displayListings(filteredListings);
+    currentDisplayLimit = 15; // Reset display limit when filtering
+    displayListings(filteredListings, currentDisplayLimit);
 }
 
 function clearFilters() {
@@ -67,23 +78,40 @@ function clearFilters() {
     document.getElementById('rating-filter').value = '';
     
     filteredListings = [...allListings];
-    displayListings(filteredListings);
+    currentDisplayLimit = 15; // Reset display limit when clearing filters
+    displayListings(filteredListings, currentDisplayLimit);
 }
 
-function displayListings(listings) {
+function displayListings(listings, limit = 15) {
     const listingsGrid = document.getElementById('listings-grid');
     const noResults = document.getElementById('no-results');
+    const showMoreContainer = document.getElementById('show-more-container');
     
     if (listings.length === 0) {
         listingsGrid.style.display = 'none';
         noResults.style.display = 'block';
+        showMoreContainer.style.display = 'none';
         return;
     }
     
     listingsGrid.style.display = 'grid';
     noResults.style.display = 'none';
     
-    listingsGrid.innerHTML = listings.map(listing => createListingCard(listing)).join('');
+    const limitedListings = listings.slice(0, limit);
+    listingsGrid.innerHTML = limitedListings.map(listing => createListingCard(listing)).join('');
+    
+    // Show count info
+    const resultsCount = document.getElementById('results-count');
+    if (resultsCount) {
+        resultsCount.textContent = `Showing ${limitedListings.length} of ${listings.length} properties`;
+    }
+    
+    // Show or hide "Show More" button
+    if (limitedListings.length < listings.length) {
+        showMoreContainer.style.display = 'block';
+    } else {
+        showMoreContainer.style.display = 'none';
+    }
 }
 
 function createListingCard(listing) {
