@@ -1,8 +1,15 @@
 let allListings = [];
 let filteredListings = [];
 
+// Worker pool configuration
+const WORKER_LIMIT = 5;
+let workerPool = [];
+let workerQueue = [];
+let workerTaskCounter = 0;
+
 document.addEventListener('DOMContentLoaded', async function() {
     try {
+        initializeWorkerPool();
         await loadListings();
         setupFilters();
         displayListings(allListings);
@@ -11,6 +18,81 @@ document.addEventListener('DOMContentLoaded', async function() {
         showError('Failed to load listings. Please refresh the page.');
     }
 });
+
+function initializeWorkerPool() {
+    for (let i = 0; i < WORKER_LIMIT; i++) {
+        const worker = {
+            instance: new Worker('./worker.js'),
+            busy: false,
+            id: i
+        };
+        
+        worker.instance.onmessage = function(e) {
+            handleWorkerMessage(worker, e);
+        };
+        
+        worker.instance.onerror = function(error) {
+            console.error('Worker error:', error);
+            worker.busy = false;
+            processWorkerQueue();
+        };
+        
+        workerPool.push(worker);
+    }
+    console.log(`Initialized worker pool with ${WORKER_LIMIT} workers`);
+}
+
+function getAvailableWorker() {
+    return workerPool.find(worker => !worker.busy);
+}
+
+function executeTask(taskType, data, callback) {
+    const taskId = ++workerTaskCounter;
+    const task = { taskType, data, callback, taskId };
+    
+    const availableWorker = getAvailableWorker();
+    
+    if (availableWorker) {
+        executeWorkerTask(availableWorker, task);
+    } else {
+        workerQueue.push(task);
+    }
+    
+    return taskId;
+}
+
+function executeWorkerTask(worker, task) {
+    worker.busy = true;
+    worker.currentTask = task;
+    
+    worker.instance.postMessage({
+        type: task.taskType,
+        data: task.data,
+        taskId: task.taskId
+    });
+}
+
+function handleWorkerMessage(worker, event) {
+    const { type, data, taskId } = event.data;
+    
+    if (worker.currentTask && worker.currentTask.taskId === taskId) {
+        worker.currentTask.callback(type, data);
+        worker.currentTask = null;
+    }
+    
+    worker.busy = false;
+    processWorkerQueue();
+}
+
+function processWorkerQueue() {
+    if (workerQueue.length === 0) return;
+    
+    const availableWorker = getAvailableWorker();
+    if (availableWorker) {
+        const task = workerQueue.shift();
+        executeWorkerTask(availableWorker, task);
+    }
+}
 
 async function loadListings() {
     try {
@@ -49,15 +131,34 @@ function applyFilters() {
     const maxPrice = parseInt(document.getElementById('price-range').value);
     const minRating = parseFloat(document.getElementById('rating-filter').value);
 
-    filteredListings = allListings.filter(listing => {
-        const matchesType = !typeFilter || listing.type === typeFilter;
-        const matchesPrice = listing.price_per_night <= maxPrice;
-        const matchesRating = !minRating || listing.rating >= minRating;
-        
-        return matchesType && matchesPrice && matchesRating;
-    });
+    const filters = {
+        typeFilter: typeFilter,
+        maxPrice: maxPrice,
+        minRating: minRating
+    };
 
-    displayListings(filteredListings);
+    // Use worker pool for filtering if we have many listings
+    if (allListings.length > 50) {
+        executeTask('FILTER_LISTINGS', 
+            { listings: allListings, filters }, 
+            (type, data) => {
+                if (type === 'FILTER_COMPLETE') {
+                    filteredListings = data;
+                    displayListings(filteredListings);
+                }
+            }
+        );
+    } else {
+        // Fallback to synchronous filtering for smaller datasets
+        filteredListings = allListings.filter(listing => {
+            const matchesType = !typeFilter || listing.type === typeFilter;
+            const matchesPrice = listing.price_per_night <= maxPrice;
+            const matchesRating = !minRating || listing.rating >= minRating;
+            
+            return matchesType && matchesPrice && matchesRating;
+        });
+        displayListings(filteredListings);
+    }
 }
 
 function clearFilters() {
@@ -233,5 +334,30 @@ function showError(message) {
     `;
 }
 
+// Test function to verify worker limit
+function testWorkerLimit() {
+    console.log(`Testing worker pool with limit: ${WORKER_LIMIT}`);
+    
+    // Create multiple tasks to test the limit
+    const testTasks = [];
+    for (let i = 0; i < 10; i++) {
+        const taskId = executeTask('PROCESS_BATCH', 
+            { batch: [{ id: i, data: `test-${i}` }] },
+            (type, data) => {
+                console.log(`Task ${i} completed:`, type, data);
+            }
+        );
+        testTasks.push(taskId);
+    }
+    
+    // Log current worker status
+    console.log('Active workers:', workerPool.filter(w => w.busy).length);
+    console.log('Queued tasks:', workerQueue.length);
+    console.log('Total workers:', workerPool.length);
+    
+    return testTasks;
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.testWorkerLimit = testWorkerLimit;
