@@ -594,6 +594,65 @@ input:focus {
     outline-offset: 2px;
 }
 
+/* Worker Test Styles */
+.test-workers-btn {
+    background: #10b981;
+    color: #fff;
+    border: 2px solid #10b981;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    height: fit-content;
+}
+
+.test-workers-btn:hover,
+.test-workers-btn:focus {
+    background: #059669;
+    border-color: #059669;
+}
+
+.worker-status {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.worker-status h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.worker-progress {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.worker-slot {
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.worker-slot.active {
+    background: #10b981;
+    color: #fff;
+}
+
+.worker-slot.inactive {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
 /* Screen reader only text */
 .sr-only {
     position: absolute;

@@ -1,10 +1,114 @@
 let allListings = [];
 let filteredListings = [];
 
+// Worker Management
+class WorkerPool {
+    constructor(maxWorkers = 9) {
+        this.maxWorkers = maxWorkers;
+        this.workers = [];
+        this.taskQueue = [];
+        this.activeTasks = 0;
+        this.completedTasks = 0;
+    }
+
+    async executeTask(taskData) {
+        return new Promise((resolve, reject) => {
+            const task = {
+                id: Date.now() + Math.random(),
+                data: taskData,
+                resolve,
+                reject
+            };
+
+            if (this.workers.length < this.maxWorkers) {
+                this.createWorker(task);
+            } else {
+                this.taskQueue.push(task);
+            }
+        });
+    }
+
+    createWorker(task) {
+        const worker = new Worker('./worker.js');
+        this.workers.push(worker);
+        this.activeTasks++;
+
+        worker.onmessage = (e) => {
+            const result = e.data;
+            task.resolve(result);
+            this.completedTasks++;
+            this.removeWorker(worker);
+            this.processQueue();
+            this.updateStatus();
+        };
+
+        worker.onerror = (error) => {
+            task.reject(error);
+            this.removeWorker(worker);
+            this.processQueue();
+            this.updateStatus();
+        };
+
+        worker.postMessage({
+            taskId: task.id,
+            data: task.data,
+            delay: Math.random() * 2000 + 500 // Random delay 500-2500ms
+        });
+
+        this.updateStatus();
+    }
+
+    removeWorker(worker) {
+        const index = this.workers.indexOf(worker);
+        if (index > -1) {
+            this.workers.splice(index, 1);
+            worker.terminate();
+            this.activeTasks--;
+        }
+    }
+
+    processQueue() {
+        if (this.taskQueue.length > 0 && this.workers.length < this.maxWorkers) {
+            const task = this.taskQueue.shift();
+            this.createWorker(task);
+        }
+    }
+
+    updateStatus() {
+        const statusDiv = document.getElementById('worker-output');
+        if (statusDiv) {
+            statusDiv.innerHTML = `
+                <p>Active Workers: ${this.workers.length}/${this.maxWorkers}</p>
+                <p>Queued Tasks: ${this.taskQueue.length}</p>
+                <p>Completed Tasks: ${this.completedTasks}</p>
+                <div class="worker-progress">
+                    ${Array.from({length: this.maxWorkers}, (_, i) => 
+                        `<div class="worker-slot ${i < this.workers.length ? 'active' : 'inactive'}">
+                            Worker ${i + 1}
+                        </div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+    }
+
+    terminateAll() {
+        this.workers.forEach(worker => worker.terminate());
+        this.workers = [];
+        this.taskQueue = [];
+        this.activeTasks = 0;
+        this.completedTasks = 0;
+        this.updateStatus();
+    }
+}
+
+const workerPool = new WorkerPool(9);
+
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
         setupFilters();
+        setupWorkerTest();
         displayListings(allListings);
     } catch (error) {
         console.error('Error initializing app:', error);
@@ -42,6 +146,39 @@ function setupFilters() {
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     priceDisplay.textContent = `₹${priceRange.value}`;
+}
+
+function setupWorkerTest() {
+    const testWorkersBtn = document.getElementById('test-workers');
+    const workerStatus = document.getElementById('worker-status');
+
+    testWorkersBtn.addEventListener('click', async function() {
+        workerStatus.style.display = 'block';
+        
+        // Generate 20 tasks to test the worker limit of 9
+        const tasks = Array.from({length: 20}, (_, i) => `Task ${i + 1}`);
+        
+        console.log('Starting worker limit test with 20 tasks...');
+        
+        // Execute all tasks
+        const promises = tasks.map(taskData => workerPool.executeTask(taskData));
+        
+        try {
+            const results = await Promise.all(promises);
+            console.log('All tasks completed:', results);
+            
+            // Add completion message
+            setTimeout(() => {
+                const output = document.getElementById('worker-output');
+                if (output) {
+                    output.innerHTML += '<p style="color: green; font-weight: bold;">✅ All 20 tasks completed successfully!</p>';
+                }
+            }, 100);
+            
+        } catch (error) {
+            console.error('Worker test failed:', error);
+        }
+    });
 }
 
 function applyFilters() {
