@@ -83,7 +83,8 @@ function displayListings(listings) {
     listingsGrid.style.display = 'grid';
     noResults.style.display = 'none';
     
-    listingsGrid.innerHTML = listings.map(listing => createListingCard(listing)).join('');
+    const limitedListings = listings.slice(0, 8);
+    listingsGrid.innerHTML = limitedListings.map(listing => createListingCard(listing)).join('');
 }
 
 function createListingCard(listing) {
