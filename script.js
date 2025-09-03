@@ -1,10 +1,13 @@
 let allListings = [];
 let filteredListings = [];
+let likeCount = 0;
+let isLiked = false;
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
         setupFilters();
+        initializeLikeButton();
         displayListings(allListings);
     } catch (error) {
         console.error('Error initializing app:', error);
@@ -233,5 +236,110 @@ function showError(message) {
     `;
 }
 
+function initializeLikeButton() {
+    const savedLikeCount = localStorage.getItem('tatooine-likes');
+    const savedLikeState = localStorage.getItem('tatooine-liked');
+    
+    if (savedLikeCount) {
+        likeCount = parseInt(savedLikeCount);
+    }
+    
+    if (savedLikeState === 'true') {
+        isLiked = true;
+    }
+    
+    updateLikeButton();
+}
+
+function toggleLike() {
+    const likeButton = document.getElementById('hero-like-btn');
+    const heartIcon = likeButton.querySelector('.heart-icon');
+    
+    if (isLiked) {
+        likeCount = Math.max(0, likeCount - 1);
+        isLiked = false;
+        likeButton.classList.remove('liked');
+        heartIcon.textContent = '♡';
+    } else {
+        likeCount++;
+        isLiked = true;
+        likeButton.classList.add('liked');
+        heartIcon.textContent = '♥';
+        
+        animateLike(likeButton);
+    }
+    
+    localStorage.setItem('tatooine-likes', likeCount.toString());
+    localStorage.setItem('tatooine-liked', isLiked.toString());
+    
+    updateLikeButton();
+}
+
+function updateLikeButton() {
+    const likeCountElement = document.getElementById('like-count');
+    const likeButton = document.getElementById('hero-like-btn');
+    const heartIcon = likeButton?.querySelector('.heart-icon');
+    
+    if (likeCountElement) {
+        likeCountElement.textContent = likeCount;
+    }
+    
+    if (likeButton && heartIcon) {
+        if (isLiked) {
+            likeButton.classList.add('liked');
+            heartIcon.textContent = '♥';
+        } else {
+            likeButton.classList.remove('liked');
+            heartIcon.textContent = '♡';
+        }
+    }
+}
+
+function animateLike(button) {
+    button.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        button.style.transform = '';
+    }, 200);
+    
+    createHeartParticles(button);
+}
+
+function createHeartParticles(button) {
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 5; i++) {
+        const heart = document.createElement('div');
+        heart.textContent = '♥';
+        heart.style.position = 'fixed';
+        heart.style.left = centerX + 'px';
+        heart.style.top = centerY + 'px';
+        heart.style.color = '#ef4444';
+        heart.style.fontSize = '20px';
+        heart.style.pointerEvents = 'none';
+        heart.style.zIndex = '9999';
+        heart.style.transform = 'translate(-50%, -50%)';
+        heart.style.transition = 'all 1.5s ease-out';
+        
+        document.body.appendChild(heart);
+        
+        setTimeout(() => {
+            const angle = (360 / 5) * i;
+            const distance = 100;
+            const x = Math.cos(angle * Math.PI / 180) * distance;
+            const y = Math.sin(angle * Math.PI / 180) * distance;
+            
+            heart.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(0)`;
+            heart.style.opacity = '0';
+        }, 10);
+        
+        setTimeout(() => {
+            document.body.removeChild(heart);
+        }, 1500);
+    }
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.toggleLike = toggleLike;

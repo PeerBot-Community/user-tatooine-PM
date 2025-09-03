@@ -98,6 +98,59 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.like-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.like-button:hover,
+.like-button:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.like-button.liked {
+    background: rgba(255, 255, 255, 0.9);
+    color: #d97706;
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.heart-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.liked .heart-icon {
+    transform: scale(1.2);
+    color: #ef4444;
+}
+
+.like-count {
+    font-weight: 700;
+    min-width: 20px;
+}
+
 /* Listings Section */
 .listings-section {
     padding: 4rem 0;
