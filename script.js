@@ -122,6 +122,10 @@ function createListingCard(listing) {
                         <span>${listing.rating} (${listing.reviews})</span>
                     </div>
                 </div>
+                <button class="reserve-btn" onclick="event.stopPropagation(); reserveRoom('${listing.id}')" 
+                        aria-label="Reserve ${listing.title}">
+                    Reserve
+                </button>
             </div>
         </div>
     `;
@@ -193,6 +197,13 @@ function openModal(listingId) {
                     ${amenitiesHtml}
                 </div>
             </div>
+            
+            <div class="modal-actions">
+                <button class="reserve-btn primary" onclick="reserveRoom('${listing.id}')" 
+                        aria-label="Reserve ${listing.title}">
+                    Reserve This Stay
+                </button>
+            </div>
         </div>
     `;
     
@@ -233,5 +244,22 @@ function showError(message) {
     `;
 }
 
+function reserveRoom(listingId) {
+    const listing = allListings.find(l => l.id === listingId);
+    if (!listing) {
+        alert('Sorry, this listing is no longer available.');
+        return;
+    }
+    
+    const confirmMessage = `Reserve "${listing.title}" for ₹${listing.price_per_night} per night?\n\nThis is a demo reservation - no actual booking will be made.`;
+    
+    if (confirm(confirmMessage)) {
+        alert(`🎉 Reservation confirmed for "${listing.title}"!\n\nA confirmation email would be sent to your registered email address.\n\nThank you for choosing Tatooine Stays!`);
+        
+        closeModal();
+    }
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.reserveRoom = reserveRoom;

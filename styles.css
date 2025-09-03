@@ -98,6 +98,36 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* Reserve button styles */
+.reserve-btn {
+    background: #d97706;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.reserve-btn:hover,
+.reserve-btn:focus {
+    background: #b45309;
+    transform: translateY(-1px);
+    outline: 2px solid #d97706;
+    outline-offset: 2px;
+}
+
+.reserve-btn.primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
 /* Listings Section */
 .listings-section {
     padding: 4rem 0;
@@ -438,6 +468,12 @@ body {
 
 .modal-amenities {
     margin-bottom: 2rem;
+}
+
+.modal-actions {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
 }
 
 .modal-amenities h4 {
