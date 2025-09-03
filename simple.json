@@ -1,0 +1,20 @@
+{
+  "name": "Simple Example",
+  "version": "1.0.0",
+  "data": [
+    {
+      "id": 1,
+      "title": "First Item",
+      "active": true
+    },
+    {
+      "id": 2,
+      "title": "Second Item", 
+      "active": false
+    }
+  ],
+  "settings": {
+    "theme": "light",
+    "language": "en"
+  }
+}
