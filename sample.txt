@@ -1,0 +1,13 @@
+Hello World!
+
+This is a simple text file created for you.
+
+Here are some sample lines:
+- Line 1: Welcome to your text file
+- Line 2: You can edit this content anytime
+- Line 3: This file is ready to use
+
+Feel free to modify this content as needed.
+
+Best regards,
+Claude Code
