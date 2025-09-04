@@ -133,6 +133,28 @@
         </div>
     </div>
 
+    <div id="referral-modal" class="modal referral-modal" role="dialog" aria-labelledby="referral-modal-title" aria-hidden="true">
+        <div class="modal-overlay" onclick="closeReferralModal()"></div>
+        <div class="modal-content referral-modal-content">
+            <button class="modal-close" onclick="closeReferralModal()" aria-label="Close referral modal">×</button>
+            <div class="referral-modal-body">
+                <h3 id="referral-modal-title">Share this amazing stay!</h3>
+                <div class="referral-property-info" id="referral-property-info">
+                </div>
+                <div class="referral-form">
+                    <label for="referral-email" class="referral-label">Friend's Email Address</label>
+                    <input type="email" id="referral-email" class="referral-input" placeholder="Enter your friend's email" required>
+                    <button id="share-btn" class="share-btn" onclick="shareReferral()">
+                        📤 Share
+                    </button>
+                </div>
+                <div id="referral-success" class="referral-success" style="display: none;">
+                    <p>✅ Referral sent successfully!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

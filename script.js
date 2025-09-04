@@ -122,6 +122,11 @@ function createListingCard(listing) {
                         <span>${listing.rating} (${listing.reviews})</span>
                     </div>
                 </div>
+                <div class="listing-actions">
+                    <button class="referral-btn" onclick="event.stopPropagation(); openReferralModal('${listing.id}')" aria-label="Share this listing">
+                        📧 Refer Friend
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -233,5 +238,98 @@ function showError(message) {
     `;
 }
 
+let currentReferralListing = null;
+
+function openReferralModal(listingId) {
+    const listing = allListings.find(l => l.id === listingId);
+    if (!listing) return;
+    
+    currentReferralListing = listing;
+    const modal = document.getElementById('referral-modal');
+    const propertyInfo = document.getElementById('referral-property-info');
+    
+    propertyInfo.innerHTML = `
+        <div class="referral-property-card">
+            <div class="referral-property-icon">${getListingIcon(listing.type)}</div>
+            <div class="referral-property-details">
+                <h4>${listing.title}</h4>
+                <p>${listing.location}</p>
+                <p class="referral-price">₹${listing.price_per_night}/night</p>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('referral-email').value = '';
+    document.getElementById('referral-success').style.display = 'none';
+    
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    
+    const emailInput = document.getElementById('referral-email');
+    emailInput.focus();
+    
+    document.addEventListener('keydown', handleReferralModalKeyDown);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeReferralModal() {
+    const modal = document.getElementById('referral-modal');
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    document.removeEventListener('keydown', handleReferralModalKeyDown);
+    document.body.style.overflow = 'auto';
+    currentReferralListing = null;
+}
+
+function handleReferralModalKeyDown(event) {
+    if (event.key === 'Escape') {
+        closeReferralModal();
+    }
+}
+
+function shareReferral() {
+    const email = document.getElementById('referral-email').value.trim();
+    
+    if (!email) {
+        alert('Please enter an email address');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        alert('Please enter a valid email address');
+        return;
+    }
+    
+    if (!currentReferralListing) {
+        alert('No property selected');
+        return;
+    }
+    
+    const shareBtn = document.getElementById('share-btn');
+    shareBtn.disabled = true;
+    shareBtn.textContent = '📤 Sharing...';
+    
+    setTimeout(() => {
+        document.getElementById('referral-success').style.display = 'block';
+        shareBtn.disabled = false;
+        shareBtn.textContent = '📤 Share';
+        
+        console.log(`Referral sent to ${email} for property: ${currentReferralListing.title}`);
+        
+        setTimeout(() => {
+            closeReferralModal();
+        }, 2000);
+    }, 1000);
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.openReferralModal = openReferralModal;
+window.closeReferralModal = closeReferralModal;
+window.shareReferral = shareReferral;
