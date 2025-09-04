@@ -103,7 +103,12 @@ function createListingCard(listing) {
             <div class="listing-content">
                 <div class="listing-header">
                     <h3 class="listing-title">${listing.title}</h3>
-                    <span class="property-type-badge">${listing.type}</span>
+                    <div class="header-right">
+                        <button class="referral-btn" onclick="event.stopPropagation(); openReferralModal('${listing.id}')" aria-label="Share this listing">
+                            📧
+                        </button>
+                        <span class="property-type-badge">${listing.type}</span>
+                    </div>
                 </div>
                 <div class="listing-location">${listing.location}</div>
                 <div class="listing-details">
@@ -121,11 +126,6 @@ function createListingCard(listing) {
                         <span class="star">${stars}</span>
                         <span>${listing.rating} (${listing.reviews})</span>
                     </div>
-                </div>
-                <div class="listing-actions">
-                    <button class="referral-btn" onclick="event.stopPropagation(); openReferralModal('${listing.id}')" aria-label="Share this listing">
-                        📧 Refer Friend
-                    </button>
                 </div>
             </div>
         </div>
