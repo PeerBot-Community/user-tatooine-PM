@@ -239,15 +239,16 @@ function handleModalKeyDown(event) {
 }
 
 function showError(message) {
-    const listingsGrid = document.getElementById('listings-grid');
-    const noResults = document.getElementById('no-results');
+    const affordableGrid = document.getElementById('affordable-grid');
+    const premiumGrid = document.getElementById('premium-grid');
     
-    listingsGrid.style.display = 'none';
-    noResults.style.display = 'block';
-    noResults.innerHTML = `
-        <h3>Oops! Something went wrong</h3>
-        <p>${message}</p>
+    affordableGrid.innerHTML = `
+        <div style="text-align: center; padding: 2rem; color: #6b7280; grid-column: 1 / -1;">
+            <h3>Oops! Something went wrong</h3>
+            <p>${message}</p>
+        </div>
     `;
+    premiumGrid.style.display = 'none';
 }
 
 window.openModal = openModal;
