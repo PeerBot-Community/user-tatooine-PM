@@ -103,6 +103,38 @@ body {
     padding: 4rem 0;
 }
 
+/* Affordable Section */
+.affordable-section {
+    padding: 3rem 0;
+    background: #f0f9ff;
+    border-bottom: 2px solid #e0f2fe;
+}
+
+.affordable-section .section-title {
+    color: #0284c7;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Premium Section */
+.premium-section {
+    padding: 4rem 0;
+    background: #fefce8;
+    border-top: 2px solid #facc15;
+}
+
+.premium-section .section-title {
+    color: #ca8a04;
+}
+
 .section-title {
     font-size: 2rem;
     font-weight: 700;
@@ -194,13 +226,69 @@ body {
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+    position: relative;
 }
 
-.listing-card:hover,
-.listing-card:focus-within {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+/* Affordable cards styling */
+.affordable-card {
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
 }
+
+.affordable-card:hover,
+.affordable-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.25);
+}
+
+.affordable-card .listing-image {
+    background: linear-gradient(45deg, #0ea5e9, #0284c7);
+}
+
+.affordable-card .listing-price {
+    color: #0284c7;
+}
+
+/* Premium cards styling */
+.premium-card {
+    border: 2px solid #eab308;
+    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+}
+
+.premium-card:hover,
+.premium-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);
+}
+
+.premium-card .listing-image {
+    background: linear-gradient(45deg, #eab308, #ca8a04);
+}
+
+.premium-card .listing-price {
+    color: #ca8a04;
+}
+
+/* Ranking badges */
+.rank-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ca8a04;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
 
 .listing-image {
     width: 100%;

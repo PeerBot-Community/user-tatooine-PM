@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         await loadListings();
         setupFilters();
-        displayListings(allListings);
+        displayAffordableStays();
+        displayPremiumStays(allListings);
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Failed to load listings. Please refresh the page.');
@@ -57,7 +58,7 @@ function applyFilters() {
         return matchesType && matchesPrice && matchesRating;
     });
 
-    displayListings(filteredListings);
+    displayPremiumStays(filteredListings);
 }
 
 function clearFilters() {
@@ -67,26 +68,39 @@ function clearFilters() {
     document.getElementById('rating-filter').value = '';
     
     filteredListings = [...allListings];
-    displayListings(filteredListings);
+    displayPremiumStays(filteredListings);
 }
 
-function displayListings(listings) {
-    const listingsGrid = document.getElementById('listings-grid');
+function displayAffordableStays() {
+    const affordableGrid = document.getElementById('affordable-grid');
+    
+    const cheapestStays = [...allListings]
+        .sort((a, b) => a.price_per_night - b.price_per_night)
+        .slice(0, 3);
+    
+    affordableGrid.innerHTML = cheapestStays.map(listing => createListingCard(listing, false)).join('');
+}
+
+function displayPremiumStays(listings) {
+    const premiumGrid = document.getElementById('premium-grid');
     const noResults = document.getElementById('no-results');
     
     if (listings.length === 0) {
-        listingsGrid.style.display = 'none';
+        premiumGrid.style.display = 'none';
         noResults.style.display = 'block';
         return;
     }
     
-    listingsGrid.style.display = 'grid';
+    premiumGrid.style.display = 'grid';
     noResults.style.display = 'none';
     
-    listingsGrid.innerHTML = listings.map(listing => createListingCard(listing)).join('');
+    const rankedListings = [...listings]
+        .sort((a, b) => b.rating - a.rating);
+    
+    premiumGrid.innerHTML = rankedListings.map((listing, index) => createListingCard(listing, true, index + 1)).join('');
 }
 
-function createListingCard(listing) {
+function createListingCard(listing, showRank = false, rank = null) {
     const stars = '★'.repeat(Math.floor(listing.rating)) + 
                  (listing.rating % 1 !== 0 ? '☆' : '');
     
@@ -94,9 +108,12 @@ function createListingCard(listing) {
         `<span class="amenity-tag">${amenity}</span>`
     ).join('');
     
+    const rankBadge = showRank && rank ? `<div class="rank-badge">#${rank}</div>` : '';
+    
     return `
-        <div class="listing-card" onclick="openModal('${listing.id}')" role="button" tabindex="0" 
+        <div class="listing-card ${showRank ? 'premium-card' : 'affordable-card'}" onclick="openModal('${listing.id}')" role="button" tabindex="0" 
              onkeydown="if(event.key==='Enter'||event.key===' ') openModal('${listing.id}')">
+            ${rankBadge}
             <div class="listing-image">
                 ${getListingIcon(listing.type)}
             </div>

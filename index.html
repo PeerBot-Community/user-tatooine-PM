@@ -15,7 +15,8 @@
                     <h1>🏜️ Tatooine Stays</h1>
                 </div>
                 <nav class="nav" aria-label="Main navigation">
-                    <a href="#listings" class="nav-link">Stays</a>
+                    <a href="#affordable-stays" class="nav-link">Budget Stays</a>
+                    <a href="#premium-stays" class="nav-link">Premium</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
                 </nav>
@@ -29,16 +30,27 @@
                 <div class="hero-content">
                     <h2 id="hero-heading">Welcome to Tatooine</h2>
                     <p class="hero-subtitle">Experience the galaxy's most unique desert accommodations under twin suns</p>
-                    <button class="cta-button" onclick="document.getElementById('listings').scrollIntoView({behavior: 'smooth'})">
+                    <button class="cta-button" onclick="document.getElementById('affordable-stays').scrollIntoView({behavior: 'smooth'})">
                         Explore Stays
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="listings" class="listings-section" aria-labelledby="listings-heading">
+        <section id="affordable-stays" class="affordable-section" aria-labelledby="affordable-heading">
             <div class="container">
-                <h2 id="listings-heading" class="section-title">Find Your Perfect Stay</h2>
+                <h2 id="affordable-heading" class="section-title">Budget-Friendly Desert Stays</h2>
+                <p class="section-subtitle">Discover our most accessible offerings - quality accommodation without breaking the bank</p>
+                
+                <div id="affordable-grid" class="listings-grid" role="region" aria-live="polite" aria-label="Affordable property listings">
+                </div>
+            </div>
+        </section>
+
+        <section id="premium-stays" class="premium-section" aria-labelledby="premium-heading">
+            <div class="container">
+                <h2 id="premium-heading" class="section-title">Premium Rankings - Highest Rated Stays</h2>
+                <p class="section-subtitle">Experience Tatooine's finest accommodations, ranked by guest satisfaction</p>
                 
                 <div class="filters" role="region" aria-label="Property filters">
                     <div class="filter-group">
@@ -79,7 +91,7 @@
                     <button id="clear-filters" class="clear-filters-btn">Clear Filters</button>
                 </div>
 
-                <div id="listings-grid" class="listings-grid" role="region" aria-live="polite" aria-label="Property listings">
+                <div id="premium-grid" class="listings-grid" role="region" aria-live="polite" aria-label="Premium property listings">
                 </div>
 
                 <div id="no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
